@@ -223,7 +223,7 @@ while True:
                                 cost = int(input(f"Увядзіце кошт пароды {breed}: "))
                                 break
                             except ValueError:
-                                print("Нэкарэктны увод дадзеных. Паспрабуйце яшчэ раз.")
+                                print("Нэкарэктны ўвод дадзеных. Паспрабуйце яшчэ раз.")
 
                         with open("animals.bin", "wb") as file_an:
                             if a == 1:
