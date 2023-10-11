@@ -1,11 +1,16 @@
+import os
+import pickle
+
 from task_1 import List
 from task_2 import Alphabet, EngAlphabet
+from task_3 import Fish, Bird
 
 
 def menu():
     print("МЕНЮ праграмы:\n"
           "1. 5 метадаў для работы са спісамі ў класе. \n"
-          "2. Заданне на стварэнне класу алфавіта.\n")
+          "2. Заданне на стварэнне класу алфавіта.\n"
+          "3. Заапарк.\n")
 
     while True:
         try:
@@ -16,6 +21,7 @@ def menu():
             print("Вы ўвялі не лік. Паспрабуце яшчэ раз")
 
     return var
+
 
 while True:
 
@@ -158,5 +164,98 @@ while True:
                             print("Вывад сказу на англійскай мове: ")
                             print(EngAlphabet.example(), end="\n")
 
+        case 3:
+            while True:
+                print("Меню: \n"
+                      "1.Запісаць дадзеныя ў файл.\n"
+                      "2.Вывесці ўсе дадзеныя з файла.\n"
+                      "3.Вывесці самы вялікі кошт пароды .\n")
 
+                while True:
+                    try:
+                        print("Увядзіце адзін з варыянтаў: ")
+                        n = int(input())
+                        if n != 1 and n != 2 and n != 3:
+                            raise Exception("Такіх варыянтаў няма.")
+                        break
+                    except ValueError:
+                        print("Вы ўвялі не лік. Паспрабуце яшчэ раз")
+                    except Exception as e:
+                        print(e)
 
+                match n:
+                    case 1:
+
+                        try:
+                            with open("animals.bin", "rb") as file_an:
+                                list_animals = pickle.load(file_an)
+                        except EOFError:
+                            list_animals = set()
+                            print("Файл пусты.")
+
+                        print("Выберыце жывелу: \n"
+                              "1. Рыба\n"
+                              "2. Птушка\n")
+
+                        while True:
+                            try:
+                                a = int(input("Жывёла №: "))
+                                if a != 1 and a != 2:
+                                    raise Exception("Вы можаце выбраць толькі 1-ую або 2-ю жывёлу.")
+                                break
+                            except ValueError:
+                                print("Вы ўвялі не лік. Паспрабуйце яшчэ раз.")
+                            except Exception as e:
+                                print(e)
+
+                        while True:
+                            try:
+                                breed = input("Увядзіце пароду жывелы: ")
+                                for i in breed:
+                                    if i.isdigit():
+                                        raise Exception
+                                break
+                            except Exception:
+                                print("Назва пароды не можа ўтрымліваць лічбы: ")
+
+                        while True:
+                            try:
+                                cost = int(input(f"Увядзіце кошт пароды {breed}: "))
+                                break
+                            except ValueError:
+                                print("Нэкарэктны увод дадзеных. Паспрабуйце яшчэ раз.")
+
+                        with open("animals.bin", "wb") as file_an:
+                            if a == 1:
+                                fish = Fish(breed, cost)
+                                list_animals.add(("Рыба", breed, cost))
+                                pickle.dump(list_animals, file_an)
+                            else:
+                                bird = Bird(breed, cost)
+                                list_animals.add(("Птушка", breed, cost))
+                                pickle.dump(list_animals, file_an)
+
+                    case 2:
+                        try:
+                            with open("animals.bin", "rb") as file_an:
+                                list_animals = pickle.load(file_an)
+                        except EOFError:
+                            list_animals = set()
+                            print("Файл пусты.")
+
+                        for tpl in list_animals:
+                            print(f"{tpl[0]} пароды {tpl[1]} каштуе {tpl[2]} BYN")
+
+                        print()
+
+                    case 3:
+                        try:
+                            with open("animals.bin", "rb") as file_an:
+                                list_animals = pickle.load(file_an)
+                        except EOFError:
+                            list_animals = set()
+                            print("Файл пусты.")
+
+                        max_cost = sorted(list_animals, key=lambda x: x[2])[-1]
+
+                        print(f"{max_cost[0]} пароды {max_cost[1]} мае самы вялікі кошт: {max_cost[2]} BYN")
